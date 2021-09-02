@@ -1,68 +1,44 @@
 {
   "env": {
     "browser": true,
-    "es2021": true,
-    "node": true
+    "es2020": true
   },
   "extends": [
     "plugin:react/recommended",
     "airbnb",
-    "plugin:jsx-a11y/recommended",
     "plugin:@typescript-eslint/recommended",
-    "plugin:testing-library/react",
-    "plugin:jest-dom/recommended",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "prettier"
   ],
-  "globals": {
-    "React": "readonly"
-  },
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaFeatures": {
-      "tsx": true
+      "jsx": true
     },
-    "ecmaVersion": 12,
+    "ecmaVersion": 11,
     "sourceType": "module"
   },
   "plugins": [
     "react",
-    "react-hooks",
     "@typescript-eslint",
+    "react-hooks",
     "prettier"
   ],
   "rules": {
-    "camelcase": "off",
-    "import/no-duplicates": "off",
-    "react/jsx-props-no-spreading": "off",
     "prettier/prettier": "error",
+    "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "react/prop-types": "off",
-    "jsx-a11y/anchor-is-valid": [
-      "error",
-      {
-        "components": [
-          "Link"
-        ],
-        "specialLink": [
-          "hrefLeft",
-          "hrefRight"
-        ],
-        "aspects": [
-          "invalidHref",
-          "preferButton"
-        ]
-      }
-    ],
-    "react/jsx-one-expression-per-line": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
-    "react/require-default-props": "off",
-    "react/jsx-filename-extension": [
-      1,
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+    "react/prop-types": "off",
+    "no-return-assign": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
       {
-        "extensions": [
-          ".tsx"
-        ]
+        "allowExpressions": true
       }
     ],
     "import/prefer-default-export": "off",
@@ -74,18 +50,12 @@
         "tsx": "never"
       }
     ],
-    // "@typescript-eslint/explicit-function-return-type": [
-    //   "error",
-    //   {
-    //     "allowExpressions": true
-    //   }
-    // ],
-    "@typescript-eslint/camelcase": "off"
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "no-unused-expressions": "off",
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": ["error"]
   },
   "settings": {
-    "react": {
-      "version": "detect"
-    },
     "import/resolver": {
       "typescript": {}
     }
