@@ -6,6 +6,7 @@
 .pnp.js
 
 # testing
+__tests__
 /coverage
 
 # next.js
