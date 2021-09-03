@@ -2,7 +2,7 @@ import { Button, Flex, Stack } from '@chakra-ui/react';
 import React from 'react';
 import { Input } from '../components/form/input';
 
-export default function SigIn() {
+export default function SigIn(): JSX.Element {
   return (
     <>
       <Flex w="100vw" h="100vh" align="center" justify="center">
