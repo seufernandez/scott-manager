@@ -13,6 +13,7 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
+import Link from 'next/link';
 import React from 'react';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 import { Header } from '../../components/Header';
@@ -23,7 +24,6 @@ export default function UserList(): JSX.Element {
   return (
     <Box>
       <Header />
-      {/* Cableçalho */}
       <Flex width="100%" maxWidth={1080} mx="auto" px="6">
         <Sidebar />
         <Box flex="1" borderRadius={8} bg="gray.800" p="8">
@@ -31,16 +31,19 @@ export default function UserList(): JSX.Element {
             <Heading size="lg" fontWeight="normal">
               Users
             </Heading>
-            <Button
-              as="a"
-              size="sm"
-              fontSize="small"
-              href=""
-              colorScheme="orange"
-              leftIcon={<Icon as={RiAddLine} fontSize="18" />}
-            >
-              New User
-            </Button>
+
+            <Link href="/users/create" passHref>
+              <Button
+                as="a"
+                size="sm"
+                fontSize="small"
+                href=""
+                colorScheme="orange"
+                leftIcon={<Icon as={RiAddLine} fontSize="18" />}
+              >
+                New User
+              </Button>
+            </Link>
           </Flex>
 
           <Table colorScheme="whiteAlpha">
