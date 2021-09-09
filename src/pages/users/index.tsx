@@ -16,18 +16,19 @@ import {
   Tr,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
-import { useQuery } from 'react-query';
 
 import { Header } from '../../components/Header';
 import Pagination from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
-import { api } from '../../services/api';
 import { useUsers } from '../../services/hooks/useUsers';
 
 export default function UserList(): JSX.Element {
-  const { data, isLoading, isFetching, error } = useUsers();
+  const [currentPage, setCurrentPage] = useState(1);
+  console.log(currentPage);
+
+  const { data, isLoading, isFetching, error } = useUsers(currentPage);
 
   return (
     <Box>
@@ -84,7 +85,7 @@ export default function UserList(): JSX.Element {
                   </Tr>
                 </Thead>
                 <Tbody>
-                  {data.map(user => {
+                  {data.users.map(user => {
                     return (
                       <Tr key={user.id}>
                         <Td px="6">
@@ -117,7 +118,11 @@ export default function UserList(): JSX.Element {
                 </Tbody>
               </Table>
 
-              <Pagination />
+              <Pagination
+                totalCountOfRegisters={data.totalCount}
+                currentPage={currentPage}
+                onPageChange={setCurrentPage}
+              />
             </>
           )}
         </Box>

@@ -1,7 +1,46 @@
-import { Box, Button, Stack } from '@chakra-ui/react';
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable react/require-default-props */
+import { Box, Stack, Text } from '@chakra-ui/react';
 import { PaginationItem } from './PaginationItem';
 
-export default function Pagination(): JSX.Element {
+interface PaginationProps {
+  totalCountOfRegisters: number;
+  registerPerPage?: number;
+  currentPage?: number;
+  onPageChange: (page: number) => void;
+}
+
+const siblingsCount = 1;
+
+function generatePagesArray(from: number, to: number) {
+  return [...new Array(to - from)]
+    .map((_, index) => {
+      return from + index + 1;
+    })
+    .filter(page => page > 0);
+}
+
+export default function Pagination({
+  totalCountOfRegisters,
+  registerPerPage = 10,
+  currentPage = 1,
+  onPageChange,
+}: PaginationProps): JSX.Element {
+  const lastPage = Math.floor(totalCountOfRegisters / registerPerPage);
+
+  const previousPages =
+    currentPage > 1
+      ? generatePagesArray(currentPage - 1 - siblingsCount, currentPage - 1)
+      : [];
+
+  const nextPages =
+    currentPage < lastPage
+      ? generatePagesArray(
+          currentPage,
+          Math.min(currentPage + siblingsCount, lastPage)
+        )
+      : [];
+
   return (
     <Stack
       direction={['column', 'row', 'row']}
@@ -11,14 +50,58 @@ export default function Pagination(): JSX.Element {
       align="center"
     >
       <Box>
-        <strong>0</strong> - <strong>5</strong> of 25
+        <strong>0</strong> - <strong>10</strong> of {totalCountOfRegisters}
       </Box>
       <Stack direction="row" spacing="2">
-        <PaginationItem number="1" isCurrent />
-        <PaginationItem number="2" />
-        <PaginationItem number="3" />
-        <PaginationItem number="4" />
-        <PaginationItem number="5" />
+        {currentPage > 1 + siblingsCount && (
+          <>
+            <PaginationItem onPageChange={onPageChange} number={1} />
+            {currentPage > 2 + siblingsCount && (
+              <Text color="gray.300" w="8" align="center">
+                ...
+              </Text>
+            )}
+          </>
+        )}
+
+        {previousPages.length > 0 &&
+          previousPages.map(page => {
+            return (
+              <PaginationItem
+                onPageChange={onPageChange}
+                key={page}
+                number={page}
+              />
+            );
+          })}
+
+        <PaginationItem
+          onPageChange={onPageChange}
+          number={currentPage}
+          isCurrent
+        />
+
+        {nextPages.length > 0 &&
+          nextPages.map(page => {
+            return (
+              <PaginationItem
+                onPageChange={onPageChange}
+                key={page}
+                number={page}
+              />
+            );
+          })}
+
+        {currentPage + siblingsCount < lastPage && (
+          <>
+            {currentPage + siblingsCount < lastPage && (
+              <Text color="gray.300" w="8" align="center">
+                ...
+              </Text>
+            )}
+            <PaginationItem onPageChange={onPageChange} number={lastPage} />
+          </>
+        )}
       </Stack>
     </Stack>
   );

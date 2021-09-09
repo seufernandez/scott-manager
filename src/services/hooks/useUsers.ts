@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable camelcase */
 import { useQuery } from 'react-query';
 import { api } from '../api';
@@ -9,8 +11,19 @@ type User = {
   created_at: string;
 };
 
-async function getUsers() {
-  const { data } = await api.get('users');
+type GetUsersResponse = {
+  totalCount: number;
+  users: User[];
+};
+
+async function getUsers(currentPage: number): Promise<GetUsersResponse> {
+  const { data, headers } = await api.get('users', {
+    params: {
+      page: currentPage,
+    },
+  });
+
+  const totalCount = Number(headers['x-total-count']);
 
   const users = data.users.map(user => {
     return {
@@ -25,11 +38,11 @@ async function getUsers() {
     };
   });
 
-  return users;
+  return { users, totalCount };
 }
 
-export function useUsers() {
-  return useQuery<User[]>('users', getUsers, {
+export function useUsers(currentPage: number) {
+  return useQuery(['users', currentPage], () => getUsers(currentPage), {
     staleTime: 1000 * 5, // 5 seconds
   });
 }
