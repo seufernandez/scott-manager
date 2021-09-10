@@ -87,13 +87,23 @@ export default function Dashboard(): JSX.Element {
               <Text fontSize="lg" mb="4">
                 Week Paper Selling
               </Text>
-              <Chart options={options} series={series} type="area" h={160} />
+              <Chart
+                options={options}
+                series={series}
+                type="area"
+                height={160}
+              />
             </Box>
             <Box p={['4', '6']} bg="gray.800" borderRadius={8} pb="4">
               <Text fontSize="lg" mb="4">
                 Scranton Branch Taxes
               </Text>
-              <Chart options={options} series={series} type="area" h={160} />
+              <Chart
+                options={options}
+                series={series}
+                type="area"
+                height={160}
+              />
             </Box>
           </SimpleGrid>
         </Flex>
