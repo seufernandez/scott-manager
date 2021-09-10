@@ -21,7 +21,7 @@ export function NavLink({
   ...rest
 }: NavLinkProps): JSX.Element {
   return (
-    <ActiveLink href={href} passHref>
+    <ActiveLink href={href} passHref shouldMatchHref={false}>
       <ChakraLink display="flex" align="center" {...rest}>
         <Icon as={icon} fontSize="20" />
         <Text ml="4" fontWeight="medium">

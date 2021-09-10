@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import { useRouter } from 'next/dist/client/router';
 import Link, { LinkProps } from 'next/link';
 import { cloneElement, ReactElement } from 'react';
@@ -11,7 +13,7 @@ export function ActiveLink({
   children,
   shouldMatchHref = false,
   ...rest
-}: ActiveLinkProps): JSX.Element {
+}: ActiveLinkProps) {
   const { asPath } = useRouter();
   let isActive = false;
 
