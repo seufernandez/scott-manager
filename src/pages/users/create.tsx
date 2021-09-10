@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import {
   Box,
   Button,
@@ -16,9 +18,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import React from 'react';
 
+import { useMutation } from 'react-query';
+import { useRouter } from 'next/dist/client/router';
 import { Input } from '../../components/form/input';
 import { Header } from '../../components/Header';
 import { Sidebar } from '../../components/Sidebar';
+import { api } from '../../services/api';
+import { queryClient } from '../../services/queryClient';
 
 type CreateUserFormData = {
   name: string;
@@ -40,20 +46,41 @@ const createUserFormSchema = yup.object().shape({
 });
 
 export default function CreateUser() {
+  const router = useRouter();
+
+  const createUser = useMutation(
+    async (user: CreateUserFormData) => {
+      const response = await api.post('users', {
+        user: {
+          ...user,
+          created_at: new Date(),
+        },
+      });
+      return response.data.user;
+    },
+    {
+      onSuccess: () => {
+        // to make the previous user data gone to when we get back to users
+        // page we have a updated list with our new user
+        queryClient.invalidateQueries('users');
+      },
+    }
+  );
+
   const { register, handleSubmit, formState, errors } = useForm({
     resolver: yupResolver(createUserFormSchema),
   });
 
   const handleCreateUser: SubmitHandler<CreateUserFormData> = async data => {
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    await createUser.mutateAsync(data);
 
+    router.push('/users');
     console.log(data);
   };
 
   return (
     <Box>
       <Header />
-      {/* Cableçalho */}
       <Flex width="100%" maxWidth={1080} mx="auto" px="6">
         <Sidebar />
 

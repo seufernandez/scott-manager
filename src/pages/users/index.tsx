@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable no-nested-ternary */
 import {
   Box,
   Button,
   Checkbox,
   Flex,
+  Link,
   Heading,
   Icon,
   Spinner,
@@ -15,20 +17,36 @@ import {
   Thead,
   Tr,
 } from '@chakra-ui/react';
-import Link from 'next/link';
+import NextLink from 'next/link';
 import React, { useState } from 'react';
 import { RiAddLine, RiPencilLine } from 'react-icons/ri';
 
 import { Header } from '../../components/Header';
 import Pagination from '../../components/Pagination';
 import { Sidebar } from '../../components/Sidebar';
+import { api } from '../../services/api';
 import { useUsers } from '../../services/hooks/useUsers';
+import { queryClient } from '../../services/queryClient';
 
 export default function UserList(): JSX.Element {
   const [currentPage, setCurrentPage] = useState(1);
   console.log(currentPage);
 
   const { data, isLoading, isFetching, error } = useUsers(currentPage);
+
+  async function handlePrefetchUser(userId: string) {
+    await queryClient.prefetchQuery(
+      ['user', userId],
+      async () => {
+        const response = await api.get(`users/${userId}`);
+
+        return response.data;
+      },
+      {
+        staleTime: 1000 * 60 * 5, // 5min
+      }
+    );
+  }
 
   return (
     <Box>
@@ -49,7 +67,7 @@ export default function UserList(): JSX.Element {
               )}
             </Heading>
 
-            <Link href="/users/create" passHref>
+            <NextLink href="/users/create" passHref>
               <Button
                 as="a"
                 size="sm"
@@ -60,7 +78,7 @@ export default function UserList(): JSX.Element {
               >
                 New User
               </Button>
-            </Link>
+            </NextLink>
           </Flex>
 
           {isLoading ? (
@@ -89,11 +107,16 @@ export default function UserList(): JSX.Element {
                     return (
                       <Tr key={user.id}>
                         <Td px="6">
-                          <Checkbox colorScheme="orange" />
+                          <Checkbox checkbox colorScheme="orange" />
                         </Td>
                         <Td>
                           <Box>
-                            <Text fontWeight="bold">{user.name}</Text>
+                            <Link
+                              color="purple.300"
+                              onMouseEnter={() => handlePrefetchUser(user.id)}
+                            >
+                              <Text fontWeight="bold">{user.name}</Text>
+                            </Link>
                             <Text fontSize="small" color="gray.500">
                               {user.email}
                             </Text>
