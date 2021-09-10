@@ -37,3 +37,4 @@ yarn-error.log*
 #dev enviroment
 .eslintrc.json*
 prettier.config.js*
+.editorconfig*
